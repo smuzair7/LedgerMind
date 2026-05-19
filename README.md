@@ -76,7 +76,7 @@ This skips Docker entirely — useful for browsing the code or running the API s
 
 **Frontend** · Next.js 15 (App Router) · React 19 · TypeScript · Tailwind · shadcn-style hand-rolled UI · Zustand (sessionStorage-hydrated) · react-markdown
 
-**Infrastructure** · Docker Compose · GitHub Actions (lint + typecheck + build) · MIT
+**Infrastructure** · Docker Compose · MIT
 
 ## Project layout
 
@@ -106,10 +106,9 @@ LedgerMind/
 │   └── Dockerfile
 ├── docs/
 │   ├── diagrams/             mermaid + SVG sources
-│   └── screenshots/          portfolio shots (landing, chat, calc card, …)
+│   └── screenshots/          screenshots (landing, chat, calc card, …)
 ├── docker-compose.yml        qdrant + redis + minio + backend + worker + web
 ├── .env.example              infra only — NO provider keys live server-side
-├── .github/workflows/ci.yml  lint + typecheck + build for both apps
 ├── ARCHITECTURE.md
 └── README.md
 ```
@@ -150,9 +149,3 @@ If you clone into a OneDrive-synced folder, exclude `node_modules/`, `.next/`, `
 ## License
 
 MIT. See [LICENSE](./LICENSE).
-
----
-
-<div align="center">
-<sub>Built as a portfolio project. Honest comparison: the prior Streamlit prototype lives at <a href="https://github.com/smuzair7/LedgerMind">smuzair7/LedgerMind</a>'s previous iteration. This is what it became.</sub>
-</div>

@@ -1,9 +1,9 @@
 """Lightweight query expansion.
 
-For the GitHub-portfolio scope this is intentionally cheap: it does NOT call
-the LLM (which would cost a round-trip + the user's tokens). Instead it
-extracts entity hints and emits 1-2 paraphrases via simple rules. A future
-upgrade can swap in an LLM-driven expansion behind the same interface.
+Intentionally cheap: it does NOT call the LLM (which would cost a round-trip
+plus the user's tokens). Instead it extracts entity hints and emits 1-2
+paraphrases via simple rules. A future upgrade can swap in an LLM-driven
+expansion behind the same interface.
 """
 
 from __future__ import annotations

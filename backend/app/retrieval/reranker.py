@@ -61,8 +61,9 @@ def rerank(
             for c, s in zip(candidates, scores, strict=True)
         ]
     except Exception as e:  # noqa: BLE001
-        # If the reranker model can't load (e.g. offline portfolio review),
-        # fall back to the upstream RRF scores so the system still works.
+        # If the reranker model can't load (e.g. running offline with no
+        # cached weights), fall back to the upstream RRF scores so retrieval
+        # still works.
         log.warning("reranker fallback to upstream scores: %s", e)
         out = [
             RerankResult(payload=c.payload, score_before=c.score_before, score=c.score_before)

@@ -25,7 +25,7 @@ class FileStorage(Protocol):
 
 
 class LocalFileStorage:
-    """Disk-backed storage. Cheap, ideal for dev + most portfolio reviewers."""
+    """Disk-backed storage. The default in dev and the no-S3 path in prod."""
 
     def __init__(self, root: Path | str) -> None:
         self.root = Path(root)

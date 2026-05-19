@@ -70,7 +70,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-grid opacity-40" aria-hidden />
         <div className="container-wide relative grid items-center gap-12 py-24 lg:grid-cols-[1.1fr_1fr] lg:py-32">
           <div className="space-y-7 animate-fade-in">
-            <Badge variant="accent">Portfolio build · open source</Badge>
+            <Badge variant="accent">Open source · MIT</Badge>
             <h1 className="text-balance text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
               Read financial statements
               <br />

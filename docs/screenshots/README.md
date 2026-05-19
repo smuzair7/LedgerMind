@@ -1,6 +1,6 @@
 # Screenshots
 
-Portfolio screenshots captured against a clean sample dataset. Linked from the root `README.md`.
+Screenshots captured against a clean sample dataset. Linked from the root `README.md`.
 
 Targets:
 - `landing.png` — marketing hero
