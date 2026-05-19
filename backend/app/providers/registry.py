@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from app.providers.anthropic_provider import AnthropicProvider
 from app.providers.base import LLMProvider
+from app.providers.gemini import GeminiProvider
 from app.providers.openai_compat import OpenAICompatProvider
 
 
@@ -28,11 +29,14 @@ def build_provider(
         return OpenAICompatProvider.for_custom(api_key, base_url)
     if pid == "anthropic":
         return AnthropicProvider(api_key)
-    # The following providers are scaffolded but their adapters are added in a
-    # later milestone (#8 — Remaining providers). For now they raise so the
-    # frontend doesn't silently submit chats to a missing adapter.
-    if pid in {"google", "mistral", "cohere"}:
+    if pid == "google":
+        return GeminiProvider(api_key)
+    # Mistral and Cohere use OpenAI-compatible endpoints in practice; users
+    # can reach them via the "custom" provider with their docs' base_url.
+    # Dedicated adapters land alongside provider-normalize fixture tests.
+    if pid in {"mistral", "cohere"}:
         raise UnknownProviderError(
-            f"Provider '{pid}' is in the catalog but its adapter is not wired yet."
+            f"Provider '{pid}': use 'custom' for now with the provider's "
+            "OpenAI-compatible base URL. Dedicated adapter coming."
         )
     raise UnknownProviderError(f"Unknown provider: {provider_id}")
