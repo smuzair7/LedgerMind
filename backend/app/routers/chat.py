@@ -1,14 +1,7 @@
 """POST /api/chat/stream — SSE chat endpoint.
 
-For the MVP this thin endpoint:
-  - validates the X-Provider-Key
-  - builds the per-request provider
-  - assembles the message list (system prompt + canned context for now)
-  - streams provider events through the SSE encoder
-
-Retrieval, tool-calling, and citation events are wired in later milestones
-(#6 Hybrid retrieval, #7 Calculations). The SSE event taxonomy is stable from
-day one so the frontend can be built against it.
+The router does the cheap part: provider construction + key checks. The full
+retrieve → generate pipeline lives in app.generation.orchestrator.run_chat.
 """
 
 from __future__ import annotations
@@ -19,11 +12,10 @@ from collections.abc import AsyncIterator
 from fastapi import APIRouter, HTTPException, Request, status
 from sse_starlette.sse import EventSourceResponse
 
-from app.generation.prompts import SYSTEM_PROMPT, language_hint
-from app.generation.stream import stream_event_to_sse
+from app.generation.orchestrator import run_chat
 from app.middleware.provider_key import get_provider_key
 from app.providers.registry import UnknownProviderError, build_provider
-from app.schemas.chat import ChatMessage, ChatRequest
+from app.schemas.chat import ChatRequest
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
 
@@ -43,23 +35,13 @@ async def chat_stream(payload: ChatRequest, request: Request) -> EventSourceResp
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
-    messages: list[ChatMessage] = [
-        ChatMessage(role="system", content=SYSTEM_PROMPT + "\n\n" + language_hint(payload.language)),
-        ChatMessage(role="user", content=payload.message),
-    ]
-
     async def event_iter() -> AsyncIterator[dict[str, str]]:
         try:
-            async for event in provider.stream(
-                messages=messages,
-                model=payload.model,
-                temperature=payload.temperature,
-            ):
-                frame = stream_event_to_sse(event)
-                lines = frame.split("\n", 2)
-                event_name = lines[0].removeprefix("event: ")
-                data_line = lines[1].removeprefix("data: ")
-                yield {"event": event_name, "data": data_line}
+            async for event_name, payload_dict in run_chat(request=payload, provider=provider):
+                yield {
+                    "event": event_name,
+                    "data": json.dumps(payload_dict, ensure_ascii=False),
+                }
         except Exception as e:  # noqa: BLE001
             yield {
                 "event": "error",
