@@ -10,7 +10,7 @@ from app.logging_setup import get_logger, setup_logging
 from app.middleware.provider_key import ProviderKeyMiddleware
 from app.middleware.request_id import RequestIDMiddleware
 from app.persistence.db import init_db
-from app.routers import chat, health, providers, sessions
+from app.routers import chat, documents, health, jobs, providers, sessions
 from app.settings import get_settings
 
 log = get_logger(__name__)
@@ -48,6 +48,9 @@ def create_app() -> FastAPI:
     app.include_router(health.router)
     app.include_router(providers.router)
     app.include_router(sessions.router)
+    app.include_router(documents.router)
+    app.include_router(documents.documents_router)
+    app.include_router(jobs.router)
     app.include_router(chat.router)
 
     return app

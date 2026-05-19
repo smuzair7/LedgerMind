@@ -3,13 +3,13 @@
 import * as React from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Send, FileText, PanelLeft, PanelRight, Plus, Square } from "lucide-react";
+import { Send, PanelLeft, PanelRight, Plus, Square } from "lucide-react";
 
 import { useAuth } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 import { AssistantMessage } from "@/components/chat/assistant-message";
+import { DocumentPanel } from "@/components/chat/document-panel";
 import { useChatStream } from "@/hooks/use-chat-stream";
 import { cn } from "@/lib/cn";
 
@@ -170,15 +170,8 @@ export default function ChatSessionPage() {
         </main>
 
         {rightOpen && (
-          <aside className="overflow-y-auto border-s border-border/60 bg-surface/40 p-4">
-            <div className="text-sm font-semibold">Documents</div>
-            <p className="mt-1 text-xs text-muted">Upload + citation viewer land in milestone #5.</p>
-            <Card className="mt-4 p-4 text-xs text-muted">
-              <div className="flex items-center gap-2 text-ink">
-                <FileText className="h-4 w-4 text-accent" />
-                Drag PDFs here once ingestion is wired
-              </div>
-            </Card>
+          <aside className="overflow-y-auto border-s border-border/60 bg-surface/40">
+            <DocumentPanel sessionId={sessionId} />
           </aside>
         )}
       </div>
